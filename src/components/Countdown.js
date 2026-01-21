@@ -1,223 +1,117 @@
 import React, { useState, useEffect } from 'react';
-import styled, { keyframes } from 'styled-components';
-
-// ═══════════════════════════════════════════════════════════════════════════
-// LUXE COUNTDOWN - Dramatic Fullscreen Grid
-// ═══════════════════════════════════════════════════════════════════════════
-
-const fadeIn = keyframes`
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-`;
-
-const pulse = keyframes`
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
-`;
+import styled from 'styled-components';
 
 const Section = styled.section`
-  position: relative;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background: var(--luxe-charcoal);
   padding: var(--section-padding) 2rem;
-  overflow: hidden;
-  
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: 
-      linear-gradient(90deg, rgba(212, 175, 55, 0.03) 1px, transparent 1px),
-      linear-gradient(rgba(212, 175, 55, 0.03) 1px, transparent 1px);
-    background-size: 60px 60px;
-    pointer-events: none;
-  }
+  background: var(--luxe-cream);
+  text-align: center;
 `;
 
-const Content = styled.div`
-  text-align: center;
-  max-width: 1200px;
-  width: 100%;
+const Container = styled.div`
+  max-width: 800px;
+  margin: 0 auto;
 `;
 
 const Eyebrow = styled.p`
   font-family: var(--font-sans);
-  font-size: 0.7rem;
-  font-weight: 500;
-  letter-spacing: 0.4em;
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: var(--luxe-gold);
+  color: var(--luxe-text-muted);
   margin-bottom: 1rem;
 `;
 
 const Title = styled.h2`
   font-family: var(--font-serif);
-  font-size: clamp(2rem, 5vw, 3.5rem);
-  font-weight: 300;
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
   font-style: italic;
-  color: var(--luxe-white);
-  margin-bottom: 4rem;
+  color: var(--luxe-text-heading);
+  margin-bottom: 3rem;
 `;
 
-const CountdownGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+const Grid = styled.div`
+  display: flex;
+  justify-content: center;
   gap: 2rem;
-  max-width: 900px;
-  margin: 0 auto;
   
-  @media (max-width: 768px) {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
+  @media (max-width: 500px) {
+    gap: 1rem;
   }
 `;
 
-const TimeUnit = styled.div`
-  position: relative;
-  padding: 3rem 2rem;
-  background: rgba(10, 10, 10, 0.6);
-  border: 1px solid rgba(212, 175, 55, 0.2);
-  animation: ${fadeIn} 1s var(--ease-luxe) forwards;
-  animation-delay: ${p => p.$index * 0.15}s;
-  opacity: 0;
-  
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--luxe-gold), transparent);
-  }
-  
-  &:hover {
-    border-color: rgba(212, 175, 55, 0.4);
-    background: rgba(10, 10, 10, 0.8);
-  }
-  
-  @media (max-width: 768px) {
-    padding: 2rem 1rem;
-  }
+const Item = styled.div`
+  min-width: 80px;
 `;
 
-const Number = styled.span`
-  display: block;
+const Number = styled.div`
   font-family: var(--font-serif);
-  font-size: clamp(3.5rem, 10vw, 6rem);
-  font-weight: 300;
-  background: linear-gradient(180deg, var(--luxe-white) 0%, var(--luxe-gold) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-style: italic;
+  color: var(--luxe-text-heading);
   line-height: 1;
   margin-bottom: 0.5rem;
 `;
 
-const Label = styled.span`
-  display: block;
+const Label = styled.div`
   font-family: var(--font-sans);
-  font-size: 0.65rem;
-  font-weight: 500;
-  letter-spacing: 0.3em;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.5);
-`;
-
-const Divider = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 4rem;
-`;
-
-const Line = styled.div`
-  width: 100px;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.5), transparent);
-`;
-
-const Diamond = styled.div`
-  width: 8px;
-  height: 8px;
-  background: var(--luxe-gold);
-  transform: rotate(45deg);
-`;
-
-const DateText = styled.p`
-  font-family: var(--font-serif);
-  font-size: clamp(1rem, 2.5vw, 1.4rem);
-  font-style: italic;
-  color: rgba(255, 255, 255, 0.6);
-  margin-top: 2rem;
-  letter-spacing: 0.1em;
+  color: var(--luxe-text-muted);
 `;
 
 function Countdown({ weddingDate }) {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   
-  const targetDate = weddingDate ? new Date(weddingDate) : new Date('2025-10-12T14:00:00');
+  const targetDate = new Date(weddingDate || '2025-09-14T14:00:00');
   
   useEffect(() => {
-    const calculateTimeLeft = () => {
+    const calculate = () => {
       const now = new Date();
-      const difference = targetDate - now;
+      const diff = targetDate - now;
       
-      if (difference > 0) {
+      if (diff > 0) {
         setTimeLeft({
-          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-          hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-          minutes: Math.floor((difference / 1000 / 60) % 60),
-          seconds: Math.floor((difference / 1000) % 60),
+          days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+          minutes: Math.floor((diff / 1000 / 60) % 60),
+          seconds: Math.floor((diff / 1000) % 60),
         });
       }
     };
     
-    calculateTimeLeft();
-    const timer = setInterval(calculateTimeLeft, 1000);
-    
+    calculate();
+    const timer = setInterval(calculate, 1000);
     return () => clearInterval(timer);
   }, [targetDate]);
   
-  const formatNumber = (num) => String(num).padStart(2, '0');
-  
-  const units = [
-    { value: timeLeft.days, label: 'Tage' },
-    { value: timeLeft.hours, label: 'Stunden' },
-    { value: timeLeft.minutes, label: 'Minuten' },
-    { value: timeLeft.seconds, label: 'Sekunden' },
-  ];
+  const pad = n => String(n).padStart(2, '0');
   
   return (
     <Section id="countdown">
-      <Content>
+      <Container>
         <Eyebrow>Countdown</Eyebrow>
-        <Title>Bis zu unserem großen Tag</Title>
+        <Title>Bis zum großen Tag</Title>
         
-        <CountdownGrid>
-          {units.map((unit, index) => (
-            <TimeUnit key={unit.label} $index={index}>
-              <Number>{formatNumber(unit.value)}</Number>
-              <Label>{unit.label}</Label>
-            </TimeUnit>
-          ))}
-        </CountdownGrid>
-        
-        <Divider>
-          <Line />
-          <Diamond />
-          <Line />
-        </Divider>
-        
-        <DateText>
-          Sonntag, 12. Oktober 2025 um 14:00 Uhr
-        </DateText>
-      </Content>
+        <Grid>
+          <Item>
+            <Number>{pad(timeLeft.days)}</Number>
+            <Label>Tage</Label>
+          </Item>
+          <Item>
+            <Number>{pad(timeLeft.hours)}</Number>
+            <Label>Stunden</Label>
+          </Item>
+          <Item>
+            <Number>{pad(timeLeft.minutes)}</Number>
+            <Label>Minuten</Label>
+          </Item>
+          <Item>
+            <Number>{pad(timeLeft.seconds)}</Number>
+            <Label>Sekunden</Label>
+          </Item>
+        </Grid>
+      </Container>
     </Section>
   );
 }

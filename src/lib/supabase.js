@@ -189,3 +189,11 @@ export const getArchivePhotos = async (category = null, limit = 20, offset = 0) 
   if (error) throw error;
   return data;
 };
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Alias Functions (for component compatibility)
+// ═══════════════════════════════════════════════════════════════════════════
+
+export const getRSVPs = getRSVPResponses;
+export const getPhotoUploads = getGuestPhotos;
+export const getGalleryImages = getArchivePhotos;

@@ -2,40 +2,52 @@ import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyles = createGlobalStyle`
   /* ═══════════════════════════════════════════════════════════════════════
-     LUXE THEME - Light & Elegant Design System
-     Sophisticated • Minimal • Timeless • Refined
+     LUXE THEME - Pure Light & Understated Elegance
+     Airy • Refined • Subtle • Timeless Luxury
      ═══════════════════════════════════════════════════════════════════════ */
   
   :root {
-    /* Core Colors - LIGHT Theme */
+    /* Core Colors - PURE LIGHT Palette */
     --luxe-white: #FFFFFF;
-    --luxe-cream: #FAF9F7;
-    --luxe-cream-dark: #F5F3F0;
-    --luxe-gray-100: #F0EEEB;
-    --luxe-gray-200: #E5E5E5;
-    --luxe-gray-300: #D0D0D0;
-    --luxe-gray-400: #999999;
-    --luxe-gray-500: #777777;
-    --luxe-gray-600: #666666;
-    --luxe-gray-700: #4D4D4D;
-    --luxe-gray-800: #3D3D3D;
-    --luxe-gray-900: #2D2D2D;
-    --luxe-black: #1A1A1A;
+    --luxe-cream: #FDFCFA;
+    --luxe-cream-warm: #FAF8F5;
+    --luxe-sand: #F5F3F0;
+    --luxe-linen: #F0EEEB;
     
-    /* Accent Colors */
-    --luxe-gold: #B8A369;
-    --luxe-gold-light: #C9B87A;
-    --luxe-gold-dark: #9A8754;
-    --luxe-gold-muted: rgba(184, 163, 105, 0.15);
+    /* Text Colors - Soft & Refined */
+    --luxe-text: #7A7A7A;
+    --luxe-text-light: #999999;
+    --luxe-text-muted: #B5B5B5;
+    --luxe-text-heading: #6A6A6A;
+    
+    /* Accent - Very Subtle, Understated */
+    --luxe-gold: #C8B88A;
+    --luxe-gold-soft: #D8CCA0;
+    --luxe-taupe: #C5B9A8;
+    
+    /* Borders - Barely There */
+    --luxe-border: #ECEAE6;
+    --luxe-border-light: #F5F3F0;
+    
+    /* Legacy compatibility - all lighter */
+    --luxe-gray-100: #F7F6F4;
+    --luxe-gray-200: #EFEEEC;
+    --luxe-gray-300: #E0DFDD;
+    --luxe-gray-400: #B5B5B5;
+    --luxe-gray-500: #999999;
+    --luxe-gray-600: #7A7A7A;
+    --luxe-gray-700: #6A6A6A;
+    --luxe-gray-800: #5A5A5A;
+    --luxe-gray-900: #4A4A4A;
     
     /* Typography */
     --font-serif: 'Cormorant Garamond', Georgia, serif;
     --font-sans: 'Montserrat', -apple-system, sans-serif;
     
     /* Spacing */
-    --section-padding: clamp(5rem, 12vh, 10rem);
-    --container-max: 1200px;
-    --content-max: 800px;
+    --section-padding: clamp(6rem, 14vh, 12rem);
+    --container-max: 1100px;
+    --content-max: 750px;
     
     /* Transitions */
     --ease-luxe: cubic-bezier(0.23, 1, 0.32, 1);
@@ -55,43 +67,43 @@ const GlobalStyles = createGlobalStyle`
   body {
     font-family: var(--font-sans);
     background: var(--luxe-white);
-    color: var(--luxe-gray-600);
-    line-height: 1.7;
+    color: var(--luxe-text);
+    line-height: 1.8;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
   
-  /* Typography Hierarchy */
+  /* Typography Hierarchy - Light & Airy */
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-serif);
     font-weight: 300;
     font-style: italic;
-    color: var(--luxe-gray-900);
-    line-height: 1.2;
+    color: var(--luxe-text-heading);
+    line-height: 1.3;
   }
   
-  h1 { font-size: clamp(2.5rem, 8vw, 5rem); }
-  h2 { font-size: clamp(2rem, 5vw, 3.5rem); }
-  h3 { font-size: clamp(1.5rem, 3vw, 2rem); }
-  h4 { font-size: clamp(1.2rem, 2.5vw, 1.5rem); }
+  h1 { font-size: clamp(2.2rem, 6vw, 4rem); }
+  h2 { font-size: clamp(1.8rem, 4vw, 2.8rem); }
+  h3 { font-size: clamp(1.4rem, 3vw, 1.8rem); }
+  h4 { font-size: clamp(1.1rem, 2vw, 1.4rem); }
   
   p {
     font-family: var(--font-sans);
     font-weight: 300;
-    font-size: 0.95rem;
-    line-height: 1.8;
-    color: var(--luxe-gray-600);
+    font-size: 0.9rem;
+    line-height: 1.9;
+    color: var(--luxe-text-light);
   }
   
   a {
-    color: var(--luxe-gold);
+    color: var(--luxe-text);
     text-decoration: none;
     transition: all 0.3s var(--ease-elegant);
   }
   
   a:hover {
-    color: var(--luxe-gold-dark);
+    color: var(--luxe-gold);
   }
   
   /* Luxe Buttons */
@@ -105,7 +117,7 @@ const GlobalStyles = createGlobalStyle`
   /* Form Elements */
   input, textarea, select {
     font-family: var(--font-sans);
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     border: none;
     outline: none;
     background: transparent;
@@ -115,15 +127,15 @@ const GlobalStyles = createGlobalStyle`
     outline: none;
   }
   
-  /* Selection */
+  /* Selection - Subtle */
   ::selection {
-    background: var(--luxe-gold);
-    color: var(--luxe-white);
+    background: var(--luxe-cream-warm);
+    color: var(--luxe-text);
   }
   
-  /* Scrollbar */
+  /* Scrollbar - Minimal */
   ::-webkit-scrollbar {
-    width: 6px;
+    width: 4px;
   }
   
   ::-webkit-scrollbar-track {
@@ -131,12 +143,12 @@ const GlobalStyles = createGlobalStyle`
   }
   
   ::-webkit-scrollbar-thumb {
-    background: var(--luxe-gold);
-    border-radius: 3px;
+    background: var(--luxe-taupe);
+    border-radius: 2px;
   }
   
   ::-webkit-scrollbar-thumb:hover {
-    background: var(--luxe-gold-dark);
+    background: var(--luxe-gold);
   }
   
   /* Utility Classes */

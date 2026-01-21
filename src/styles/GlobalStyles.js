@@ -14,11 +14,11 @@ const GlobalStyles = createGlobalStyle`
     --luxe-sand: #F5F3F0;
     --luxe-linen: #F0EEEB;
     
-    /* Text Colors - Soft & Refined */
-    --luxe-text: #7A7A7A;
-    --luxe-text-light: #999999;
-    --luxe-text-muted: #B5B5B5;
-    --luxe-text-heading: #6A6A6A;
+    /* Text Colors - Readable but Elegant */
+    --luxe-text: #5A5A5A;
+    --luxe-text-light: #7A7A7A;
+    --luxe-text-muted: #9A9A9A;
+    --luxe-text-heading: #4A4A4A;
     
     /* Accent - Very Subtle, Understated */
     --luxe-gold: #C8B88A;

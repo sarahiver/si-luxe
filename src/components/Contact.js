@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { submitContactForm } from '../lib/supabase';
 
 const Section = styled.section`
   padding: var(--section-padding) 2rem;

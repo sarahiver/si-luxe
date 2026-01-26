@@ -126,13 +126,14 @@ const ScrollLine = styled.div`
 `;
 
 function Hero({ data }) {
-  const config = data || {
-    name1: 'Dave',
-    name2: 'Kalle',
-    date: '20. Oktober 2026',
-    location: 'Schloss Benrath, Düsseldorf',
-    image: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1920',
-  };
+  const config = data || {};
+  const {
+    name1 = 'Dave',
+    name2 = 'Kalle',
+    weddingDateDisplay = 'October 20, 2026',
+    location = 'Château de Lumière',
+    heroImage = 'https://res.cloudinary.com/si-weddings/image/upload/v1769072318/si_cooming_soon_luxe_hero_wowu9v.jpg',
+  } = config;
   
   const scrollToContent = () => {
     window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
@@ -140,17 +141,17 @@ function Hero({ data }) {
   
   return (
     <Section id="home">
-      <BackgroundImage $image={config.image} />
+      <BackgroundImage $image={heroImage} />
       
       <Content>
         <Eyebrow>Save the Date</Eyebrow>
-        <Names>{config.name1} & {config.name2}</Names>
-        <DateText>{config.date}</DateText>
-        <Location>{config.location}</Location>
+        <Names>{name1} & {name2}</Names>
+        <DateText>{weddingDateDisplay}</DateText>
+        <Location>{location}</Location>
       </Content>
       
       <ScrollIndicator onClick={scrollToContent}>
-        <ScrollText>Entdecken</ScrollText>
+        <ScrollText>Discover</ScrollText>
         <ScrollLine />
       </ScrollIndicator>
     </Section>

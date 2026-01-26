@@ -26,7 +26,9 @@ const Logo = styled.a`
   font-family: var(--font-serif);
   font-size: 1.3rem;
   font-style: italic;
-  color: var(--luxe-text-heading);
+  color: ${p => p.$scrolled ? 'var(--luxe-text-heading)' : '#FFFFFF'};
+  text-shadow: ${p => p.$scrolled ? 'none' : '0 1px 3px rgba(0,0,0,0.3)'};
+  transition: all 0.4s ease;
   
   &:hover { color: var(--luxe-gold); }
 `;
@@ -42,10 +44,12 @@ const NavLinks = styled.div`
 const NavLink = styled.a`
   font-family: var(--font-sans);
   font-size: 0.65rem;
-  font-weight: 400;
+  font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--luxe-text-light);
+  color: ${p => p.$scrolled ? 'var(--luxe-text-light)' : '#FFFFFF'};
+  text-shadow: ${p => p.$scrolled ? 'none' : '0 1px 3px rgba(0,0,0,0.3)'};
+  transition: all 0.4s ease;
   
   &:hover { color: var(--luxe-gold); }
 `;
@@ -54,14 +58,18 @@ const RSVPButton = styled.a`
   padding: 0.6rem 1.4rem;
   font-family: var(--font-sans);
   font-size: 0.6rem;
+  font-weight: 500;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--luxe-text);
-  border: 1px solid var(--luxe-border);
+  color: ${p => p.$scrolled ? 'var(--luxe-text)' : '#FFFFFF'};
+  border: 1px solid ${p => p.$scrolled ? 'var(--luxe-border)' : 'rgba(255,255,255,0.5)'};
+  text-shadow: ${p => p.$scrolled ? 'none' : '0 1px 3px rgba(0,0,0,0.3)'};
+  transition: all 0.4s ease;
   
   &:hover {
     border-color: var(--luxe-gold);
     color: var(--luxe-gold);
+    text-shadow: none;
   }
 `;
 
@@ -73,8 +81,9 @@ const MobileButton = styled.button`
     display: block;
     width: 18px;
     height: 1px;
-    background: var(--luxe-text);
+    background: ${p => p.$scrolled ? 'var(--luxe-text)' : '#FFFFFF'};
     margin: 5px 0;
+    transition: background 0.4s ease;
   }
 `;
 
@@ -101,9 +110,11 @@ const MobileLink = styled.a`
   border-bottom: 1px solid var(--luxe-border-light);
 `;
 
-function Navigation({ sections }) {
+function Navigation({ sections, config = {} }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  
+  const { name1 = 'Dave', name2 = 'Kalle' } = config;
   
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -114,7 +125,7 @@ function Navigation({ sections }) {
   const navItems = sections || [
     { id: 'home', label: 'Home' },
     { id: 'story', label: 'Story' },
-    { id: 'timeline', label: 'Ablauf' },
+    { id: 'timeline', label: 'Schedule' },
     { id: 'location', label: 'Location' },
   ];
   
@@ -122,14 +133,14 @@ function Navigation({ sections }) {
     <>
       <Nav $scrolled={scrolled}>
         <NavContainer>
-          <Logo href="#home">V & A</Logo>
+          <Logo href="#home" $scrolled={scrolled}>{name1.charAt(0)} & {name2.charAt(0)}</Logo>
           <NavLinks>
             {navItems.map(item => (
-              <NavLink key={item.id} href={`#${item.id}`}>{item.label}</NavLink>
+              <NavLink key={item.id} href={`#${item.id}`} $scrolled={scrolled}>{item.label}</NavLink>
             ))}
-            <RSVPButton href="#rsvp">RSVP</RSVPButton>
+            <RSVPButton href="#rsvp" $scrolled={scrolled}>RSVP</RSVPButton>
           </NavLinks>
-          <MobileButton onClick={() => setMobileOpen(true)}>
+          <MobileButton onClick={() => setMobileOpen(true)} $scrolled={scrolled}>
             <span /><span />
           </MobileButton>
         </NavContainer>

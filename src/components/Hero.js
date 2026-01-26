@@ -33,9 +33,9 @@ const BackgroundImage = styled.div`
     inset: 0;
     background: linear-gradient(
       to bottom,
-      rgba(255,255,255,0.3) 0%,
-      rgba(255,255,255,0.1) 40%,
-      rgba(255,255,255,0.5) 100%
+      rgba(0,0,0,0.4) 0%,
+      rgba(0,0,0,0.3) 40%,
+      rgba(0,0,0,0.5) 100%
     );
   }
 `;
@@ -54,11 +54,12 @@ const Content = styled.div`
 
 const Eyebrow = styled.p`
   font-family: var(--font-sans);
-  font-size: 0.6rem;
+  font-size: 0.7rem;
   font-weight: 500;
   letter-spacing: 0.4em;
   text-transform: uppercase;
-  color: var(--luxe-text);
+  color: #FFFFFF;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
   margin-bottom: 1.5rem;
   animation: ${slideUp} 1s ease 0.3s both;
 `;
@@ -68,7 +69,8 @@ const Names = styled.h1`
   font-size: clamp(3rem, 10vw, 7rem);
   font-weight: 300;
   font-style: italic;
-  color: var(--luxe-text-heading);
+  color: #FFFFFF;
+  text-shadow: 0 4px 8px rgba(0,0,0,0.3);
   line-height: 1;
   margin-bottom: 1.5rem;
   animation: ${slideUp} 1s ease 0.5s both;
@@ -78,17 +80,19 @@ const DateText = styled.p`
   font-family: var(--font-serif);
   font-size: clamp(1rem, 2.5vw, 1.4rem);
   font-style: italic;
-  color: var(--luxe-text);
+  color: #FFFFFF;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
   margin-bottom: 0.5rem;
   animation: ${slideUp} 1s ease 0.7s both;
 `;
 
 const Location = styled.p`
   font-family: var(--font-sans);
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--luxe-text-light);
+  color: rgba(255,255,255,0.9);
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
   animation: ${slideUp} 1s ease 0.8s both;
 `;
 
@@ -107,10 +111,11 @@ const ScrollIndicator = styled.div`
 
 const ScrollText = styled.span`
   font-family: var(--font-sans);
-  font-size: 0.55rem;
+  font-size: 0.6rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--luxe-text-muted);
+  color: rgba(255,255,255,0.7);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
 `;
 
 const pulse = keyframes`

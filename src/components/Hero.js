@@ -127,8 +127,8 @@ const ScrollLine = styled.div`
 
 function Hero({ data }) {
   const config = data || {
-    name1: 'Victoria',
-    name2: 'Alexander',
+    name1: 'Dave',
+    name2: 'Kalle',
     date: '20. Oktober 2026',
     location: 'Schloss Benrath, Düsseldorf',
     image: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1920',

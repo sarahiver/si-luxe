@@ -235,7 +235,7 @@ function LoveStory({ stories }) {
     {
       date: 'Dezember 2025',
       title: 'Der Antrag',
-      text: 'Bei einem romantischen Winterspaziergang stellte Alexander die Frage aller Fragen. Mit Tränen in den Augen und einem strahlenden Lächeln sagte Victoria ja.',
+      text: 'Bei einem romantischen Winterspaziergang stellte Kalle die Frage aller Fragen. Mit Tränen in den Augen und einem strahlenden Lächeln sagte Dave ja.',
       image: 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=800',
     },
   ];

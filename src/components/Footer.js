@@ -158,7 +158,7 @@ const ErrorMessage = styled.p`
   text-align: center;
 `;
 
-function Footer({ name1 = 'Victoria', name2 = 'Alexander', weddingDate = '14. September 2025', onAdminLogin }) {
+function Footer({ name1 = 'Dave', name2 = 'Kalle', weddingDate = '14. September 2025', onAdminLogin }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [credentials, setCredentials] = useState({ username: '', password: '' });
   const [error, setError] = useState('');

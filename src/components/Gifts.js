@@ -374,7 +374,7 @@ function Gifts() {
             zu diesem Abenteuer würden wir uns sehr freuen.
           </MoneyText>
           <BankDetails>
-            <BankLine><span>Empfänger:</span> Victoria & Alexander</BankLine>
+            <BankLine><span>Empfänger:</span> Dave & Kalle</BankLine>
             <BankLine><span>IBAN:</span> DE89 3704 0044 0532 0130 00</BankLine>
             <BankLine><span>Betreff:</span> Hochzeitsreise</BankLine>
           </BankDetails>

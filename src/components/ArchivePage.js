@@ -1,223 +1,331 @@
-import React, { useState, useCallback } from 'react';
-import styled from 'styled-components';
-import { savePhotoUpload } from '../lib/supabase';
+import React, { useState } from 'react';
+import styled, { keyframes } from 'styled-components';
+
+const fadeIn = keyframes`
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+`;
 
 const Page = styled.div`
   min-height: 100vh;
-  background: var(--luxe-white);
+  background: var(--luxe-white, #FFFFFF);
 `;
 
-const Header = styled.header`
+// Hero Section
+const HeroSection = styled.section`
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: var(--luxe-cream, #FDFCFA);
+  padding: 4rem 2rem;
+`;
+
+const HeroContent = styled.div`
   text-align: center;
-  padding: 5rem 2rem 4rem;
-  background: var(--luxe-cream);
+  max-width: 700px;
+  animation: ${fadeIn} 1s ease;
 `;
 
 const GoldLine = styled.div`
   width: 1px;
-  height: 30px;
-  background: var(--luxe-gold);
-  margin: 0 auto 1.5rem;
+  height: 50px;
+  background: linear-gradient(to bottom, var(--luxe-gold, #C8B88A), transparent);
+  margin: 0 auto 2rem;
 `;
 
 const Eyebrow = styled.p`
-  font-family: var(--font-sans);
-  font-size: 0.6rem;
-  letter-spacing: 0.3em;
+  font-family: var(--font-sans, 'Montserrat', sans-serif);
+  font-size: 0.55rem;
+  font-weight: 500;
+  letter-spacing: 0.35em;
   text-transform: uppercase;
-  color: var(--luxe-text-muted);
-  margin-bottom: 1rem;
+  color: var(--luxe-text-muted, #9A9A9A);
+  margin-bottom: 1.5rem;
 `;
 
 const Title = styled.h1`
-  font-family: var(--font-serif);
-  font-size: clamp(2rem, 5vw, 3rem);
+  font-family: var(--font-serif, 'Cormorant Garamond', serif);
+  font-size: clamp(2.5rem, 7vw, 4rem);
+  font-weight: 300;
   font-style: italic;
-  color: var(--luxe-text-heading);
-  margin-bottom: 1rem;
+  color: var(--luxe-text-heading, #4A4A4A);
+  margin-bottom: 1.5rem;
+  line-height: 1.1;
 `;
 
 const Subtitle = styled.p`
-  font-family: var(--font-sans);
+  font-family: var(--font-sans, 'Montserrat', sans-serif);
   font-size: 0.9rem;
-  color: var(--luxe-text-light);
+  line-height: 1.9;
+  color: var(--luxe-text-light, #7A7A7A);
   max-width: 500px;
+  margin: 0 auto 2rem;
+`;
+
+const DateLocation = styled.p`
+  font-family: var(--font-sans, 'Montserrat', sans-serif);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--luxe-text-muted, #9A9A9A);
+`;
+
+// Gallery Section
+const Section = styled.section`
+  padding: var(--section-padding, 6rem) 2rem;
+  background: ${p => p.$alt ? 'var(--luxe-cream, #FDFCFA)' : 'var(--luxe-white, #FFFFFF)'};
+`;
+
+const Container = styled.div`
+  max-width: var(--container-max, 1100px);
   margin: 0 auto;
 `;
 
-const Section = styled.section`
-  padding: var(--section-padding) 2rem;
-  max-width: var(--container-max);
-  margin: 0 auto;
+const SectionHeader = styled.div`
+  text-align: center;
+  margin-bottom: 3rem;
 `;
 
 const SectionTitle = styled.h2`
-  font-family: var(--font-serif);
-  font-size: clamp(1.6rem, 3vw, 2rem);
+  font-family: var(--font-serif, 'Cormorant Garamond', serif);
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-weight: 300;
   font-style: italic;
-  color: var(--luxe-text-heading);
-  text-align: center;
-  margin-bottom: 2.5rem;
+  color: var(--luxe-text-heading, #4A4A4A);
+  margin-bottom: 0.75rem;
 `;
 
-const Grid = styled.div`
+const SectionSubtitle = styled.p`
+  font-family: var(--font-sans, 'Montserrat', sans-serif);
+  font-size: 0.8rem;
+  color: var(--luxe-text-muted, #9A9A9A);
+`;
+
+const GalleryGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
 `;
 
-const ImageWrapper = styled.div`
-  aspect-ratio: 1;
-  overflow: hidden;
-  cursor: pointer;
-  
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.5s ease;
-  }
-  
-  &:hover img { transform: scale(1.03); }
-`;
-
-const UploadSection = styled.div`
-  text-align: center;
-  padding: 3rem 2rem;
-  background: var(--luxe-cream);
-  margin: 3rem 0;
-`;
-
-const DropZone = styled.div`
-  max-width: 400px;
-  margin: 1.5rem auto 0;
-  padding: 2rem;
-  background: var(--luxe-white);
-  border: 1px dashed ${p => p.$isDragging ? 'var(--luxe-gold)' : 'var(--luxe-border)'};
-  cursor: pointer;
-  
-  &:hover { border-color: var(--luxe-gold); }
-`;
-
-const DropText = styled.p`
-  font-family: var(--font-serif);
-  font-size: 1rem;
-  font-style: italic;
-  color: var(--luxe-text-light);
-`;
-
-const ThankYouSection = styled.div`
-  text-align: center;
-  padding: 4rem 2rem;
-`;
-
-const Quote = styled.blockquote`
-  font-family: var(--font-serif);
-  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
-  font-style: italic;
-  color: var(--luxe-text);
-  max-width: 600px;
-  margin: 0 auto;
-  line-height: 1.7;
-`;
-
-const Lightbox = styled.div`
-  position: fixed;
-  inset: 0;
-  background: rgba(255, 255, 255, 0.98);
+const GalleryItem = styled.div`
+  aspect-ratio: 4/5;
+  background: var(--luxe-cream, #FDFCFA);
+  border: 1px solid var(--luxe-border, #ECEAE6);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 2000;
-  opacity: ${p => p.$isOpen ? 1 : 0};
-  visibility: ${p => p.$isOpen ? 'visible' : 'hidden'};
-  padding: 2rem;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
   
-  img {
-    max-width: 90%;
-    max-height: 85vh;
-    object-fit: contain;
+  &::after {
+    content: 'Photo';
+    font-family: var(--font-sans, 'Montserrat', sans-serif);
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--luxe-text-muted, #9A9A9A);
+  }
+  
+  &:hover {
+    border-color: var(--luxe-gold, #C8B88A);
+    transform: translateY(-4px);
   }
 `;
 
-const CloseButton = styled.button`
-  position: absolute;
-  top: 2rem;
-  right: 2rem;
-  font-size: 1.5rem;
-  color: var(--luxe-text-light);
+// Upload Section
+const UploadArea = styled.div`
+  max-width: 550px;
+  margin: 0 auto;
+  padding: 3.5rem 2rem;
+  border: 2px dashed var(--luxe-border, #ECEAE6);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: var(--luxe-white, #FFFFFF);
   
-  &:hover { color: var(--luxe-text); }
+  &:hover {
+    border-color: var(--luxe-gold, #C8B88A);
+  }
 `;
 
-function ArchivePage({ weddingData }) {
-  const [images] = useState([
-    'https://images.unsplash.com/photo-1519741497674-611481863552?w=600',
-    'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=600',
-    'https://images.unsplash.com/photo-1529634597503-139d3726fed5?w=600',
-    'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=600',
-    'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=600',
-    'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=600',
+const UploadIcon = styled.div`
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  opacity: 0.4;
+`;
+
+const UploadText = styled.p`
+  font-family: var(--font-sans, 'Montserrat', sans-serif);
+  font-size: 0.85rem;
+  color: var(--luxe-text-light, #7A7A7A);
+  margin-bottom: 1rem;
+`;
+
+const UploadButton = styled.span`
+  font-family: var(--font-sans, 'Montserrat', sans-serif);
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--luxe-gold, #C8B88A);
+  border-bottom: 1px solid var(--luxe-gold, #C8B88A);
+  padding-bottom: 0.2rem;
+`;
+
+// Guestbook Section
+const GuestbookGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+  max-width: 900px;
+  margin: 0 auto;
+`;
+
+const GuestbookCard = styled.div`
+  padding: 2rem;
+  background: var(--luxe-white, #FFFFFF);
+`;
+
+const GuestbookMessage = styled.p`
+  font-family: var(--font-serif, 'Cormorant Garamond', serif);
+  font-size: 1.1rem;
+  font-style: italic;
+  line-height: 1.8;
+  color: var(--luxe-text, #5A5A5A);
+  margin-bottom: 1.5rem;
+`;
+
+const GuestbookAuthor = styled.p`
+  font-family: var(--font-sans, 'Montserrat', sans-serif);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--luxe-text-muted, #9A9A9A);
+`;
+
+// Footer
+const ArchiveFooter = styled.footer`
+  padding: 4rem 2rem;
+  background: var(--luxe-text-heading, #4A4A4A);
+  text-align: center;
+`;
+
+const FooterLogo = styled.div`
+  font-family: var(--font-serif, 'Cormorant Garamond', serif);
+  font-size: 1.8rem;
+  font-style: italic;
+  color: var(--luxe-white, #FFFFFF);
+  margin-bottom: 1rem;
+`;
+
+const FooterText = styled.p`
+  font-family: var(--font-sans, 'Montserrat', sans-serif);
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 1.5rem;
+`;
+
+const FooterHashtag = styled.p`
+  font-family: var(--font-sans, 'Montserrat', sans-serif);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--luxe-gold, #C8B88A);
+`;
+
+function ArchivePage({ config = {} }) {
+  const {
+    coupleName = "Dave & Kalle",
+    name1 = "Dave",
+    name2 = "Kalle",
+    weddingDateDisplay = "October 20, 2026",
+    location = "Château de Lumière",
+    hashtag = "#DaveAndKalle2026",
+  } = config;
+
+  const [guestMessages] = useState([
+    { id: 1, message: "What an incredible celebration of love! We are so honored to have been part of your special day.", author: "Emma & James" },
+    { id: 2, message: "The most beautiful wedding we have ever attended. Wishing you a lifetime of happiness together!", author: "The Laurent Family" },
+    { id: 3, message: "Thank you for letting us share in your joy. Here is to forever!", author: "Sophie Martin" },
   ]);
-  const [lightboxImage, setLightboxImage] = useState(null);
-  const [isDragging, setIsDragging] = useState(false);
-  
-  const data = weddingData || {
-    name1: 'Victoria',
-    name2: 'Alexander',
-    date: '14. September 2025',
-    thankYouMessage: 'Danke, dass ihr diesen besonderen Tag mit uns gefeiert habt.',
-  };
-  
-  const handleDrop = useCallback(async (e) => {
-    e.preventDefault();
-    setIsDragging(false);
-    const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
-    for (const file of files) {
-      await savePhotoUpload({ filename: file.name, size: file.size });
-    }
-  }, []);
-  
+
   return (
     <Page>
-      <Header>
-        <GoldLine />
-        <Eyebrow>Hochzeitsarchiv</Eyebrow>
-        <Title>{data.name1} & {data.name2}</Title>
-        <Subtitle>Erinnerungen an unseren {data.date}</Subtitle>
-      </Header>
-      
+      {/* Hero */}
+      <HeroSection>
+        <HeroContent>
+          <GoldLine />
+          <Eyebrow>Our Wedding Day</Eyebrow>
+          <Title>{name1} & {name2}</Title>
+          <Subtitle>
+            Thank you for being part of the most magical day of our lives. 
+            Relive the memories and share your favorite moments with us.
+          </Subtitle>
+          <DateLocation>{weddingDateDisplay} · {location}</DateLocation>
+        </HeroContent>
+      </HeroSection>
+
+      {/* Photo Gallery */}
       <Section>
-        <SectionTitle>Galerie</SectionTitle>
-        <Grid>
-          {images.map((img, index) => (
-            <ImageWrapper key={index} onClick={() => setLightboxImage(img)}>
-              <img src={img} alt={`Foto ${index + 1}`} loading="lazy" />
-            </ImageWrapper>
-          ))}
-        </Grid>
+        <Container>
+          <SectionHeader>
+            <SectionTitle>Our Memories</SectionTitle>
+            <SectionSubtitle>A collection of moments from our celebration</SectionSubtitle>
+          </SectionHeader>
+          
+          <GalleryGrid>
+            {[...Array(8)].map((_, i) => (
+              <GalleryItem key={i} />
+            ))}
+          </GalleryGrid>
+        </Container>
       </Section>
-      
-      <UploadSection>
-        <SectionTitle>Teilt eure Fotos</SectionTitle>
-        <DropZone
-          $isDragging={isDragging}
-          onDragOver={e => { e.preventDefault(); setIsDragging(true); }}
-          onDragLeave={() => setIsDragging(false)}
-          onDrop={handleDrop}
-        >
-          <DropText>Fotos hier ablegen</DropText>
-        </DropZone>
-      </UploadSection>
-      
-      <ThankYouSection>
-        <Quote>"{data.thankYouMessage}"</Quote>
-      </ThankYouSection>
-      
-      <Lightbox $isOpen={!!lightboxImage} onClick={() => setLightboxImage(null)}>
-        <CloseButton onClick={() => setLightboxImage(null)}>×</CloseButton>
-        {lightboxImage && <img src={lightboxImage} alt="Vollbild" onClick={e => e.stopPropagation()} />}
-      </Lightbox>
+
+      {/* Upload Photos */}
+      <Section $alt>
+        <Container>
+          <SectionHeader>
+            <SectionTitle>Share Your Photos</SectionTitle>
+            <SectionSubtitle>Add your favorite moments to our collection</SectionSubtitle>
+          </SectionHeader>
+          
+          <UploadArea>
+            <UploadIcon>📷</UploadIcon>
+            <UploadText>Drag photos here or click to browse</UploadText>
+            <UploadButton>Select Files</UploadButton>
+          </UploadArea>
+        </Container>
+      </Section>
+
+      {/* Guestbook */}
+      <Section>
+        <Container>
+          <SectionHeader>
+            <SectionTitle>Kind Words</SectionTitle>
+            <SectionSubtitle>Messages from our loved ones</SectionSubtitle>
+          </SectionHeader>
+          
+          <GuestbookGrid>
+            {guestMessages.map((entry) => (
+              <GuestbookCard key={entry.id}>
+                <GuestbookMessage>"{entry.message}"</GuestbookMessage>
+                <GuestbookAuthor>— {entry.author}</GuestbookAuthor>
+              </GuestbookCard>
+            ))}
+          </GuestbookGrid>
+        </Container>
+      </Section>
+
+      {/* Footer */}
+      <ArchiveFooter>
+        <FooterLogo>{name1} & {name2}</FooterLogo>
+        <FooterText>Forever grateful for your love and support.</FooterText>
+        <FooterHashtag>{hashtag}</FooterHashtag>
+      </ArchiveFooter>
     </Page>
   );
 }

@@ -113,7 +113,8 @@ function Contact() {
   
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await submitContactForm(formData);
+    // Demo: In production, connect to backend
+    console.log('Contact form submitted:', formData);
     setSubmitted(true);
   };
   

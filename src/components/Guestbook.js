@@ -123,15 +123,19 @@ function Guestbook() {
   }, []);
   
   const loadEntries = async () => {
-    const data = await getGuestbookEntries();
-    setEntries(data || []);
+    // Demo data - in production, fetch from backend
+    setEntries([
+      { id: 1, name: 'Emma', message: 'So excited for you both! Cannot wait to celebrate!' },
+      { id: 2, name: 'James', message: 'Wishing you a lifetime of love and happiness!' },
+    ]);
   };
   
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await submitGuestbookEntry(formData);
+    // Demo: In production, save to backend
+    console.log('Guestbook entry:', formData);
+    setEntries(prev => [...prev, { id: Date.now(), ...formData }]);
     setFormData({ name: '', message: '' });
-    loadEntries();
   };
   
   return (

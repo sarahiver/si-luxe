@@ -118,8 +118,9 @@ function PhotoUpload() {
     const newPreviews = files.map(file => URL.createObjectURL(file));
     setPreviews(prev => [...prev, ...newPreviews]);
     
+    // Demo: In production, upload to storage
     for (const file of files) {
-      await savePhotoUpload({ filename: file.name, size: file.size });
+      console.log('Photo upload:', { filename: file.name, size: file.size });
     }
     
     setUploaded(true);

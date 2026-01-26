@@ -173,7 +173,8 @@ function RSVP() {
     setLoading(true);
     
     try {
-      await submitRSVP(formData);
+      // Demo: In production, save to backend
+      console.log('RSVP submitted:', formData);
       setSubmitted(true);
     } catch (error) {
       console.error('Error:', error);

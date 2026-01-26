@@ -88,7 +88,8 @@ function MusicWishes() {
   
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await submitMusicWish(formData);
+    // Demo: In production, save to backend
+    console.log('Music wish:', formData);
     setSubmitted(true);
     setFormData({ name: '', song: '', artist: '' });
   };
